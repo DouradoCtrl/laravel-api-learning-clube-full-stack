@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\InvoiceResource;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class InvoiceController extends Controller
 {
@@ -30,7 +31,19 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'user_id' => 'required',
+            'type' =>  'required|max:1',
+            'paid' => 'required|numeric|between:0,1',
+            'payment_date' => 'nullable',
+            'value' => 'required|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        return response()->json(['message' => 'Pagamento registrado com sucesso!']);
     }
 
     /**
