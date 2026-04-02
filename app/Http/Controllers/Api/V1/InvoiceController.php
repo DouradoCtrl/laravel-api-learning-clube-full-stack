@@ -44,6 +44,14 @@ class InvoiceController extends Controller
         if ($validator->fails()) {
             return $this->error('Data Invalid', 422, $validator->errors());
         }
+
+        $created = Invoice::create($validator->validated());
+
+        if(!$created) {
+            return $this->error('Erro ao registrar pagamento', 400);
+        }
+
+        return $this->response("Pagamento registrado com sucesso", 201, $created);
     }
 
     /**
