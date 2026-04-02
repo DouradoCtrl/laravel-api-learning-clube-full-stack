@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\InvoiceResource;
 use App\Models\Invoice;
+use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class InvoiceController extends Controller
 {
+    use HttpResponses;
     /**
      * Display a listing of the resource.
      */
@@ -40,10 +42,8 @@ class InvoiceController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return $this->error('Data Invalid', 422, $validator->errors());
         }
-
-        return response()->json(['message' => 'Pagamento registrado com sucesso!']);
     }
 
     /**
